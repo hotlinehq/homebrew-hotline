@@ -1,4 +1,4 @@
-# Written by scripts/update-edge.sh on every edge build. Do not edit by hand.
+# Written by scripts/update.sh. Do not edit by hand.
 class HotlineProxyEdge < Formula
   desc "Hotline proxy, newest build of main (signed and notarized, Apple silicon)"
   homepage "https://github.com/hotlinehq/hotline"
