@@ -34,9 +34,17 @@ To remove them: `brew uninstall hotline-proxy-edge`, `brew uninstall --cask hotl
 
 ## Update
 
-```
-brew update && brew upgrade hotline-proxy-edge
-brew upgrade --cask hotline-capture
-```
+Two things happen in order: first the tap learns about new builds, then your Mac picks them up.
 
-New builds show up here only after someone presses **Run workflow** on the "update recipes" workflow on this repository's Actions page. It reads the newest proxy edge release and the newest Capture release, copies each release's own checksum into the recipe, and commits only when something changed. The recipes are written by `scripts/update.sh`; do not edit them by hand.
+1. **Update the tap** (whoever publishes builds does this, after a new proxy edge build or a new Capture release):
+   1. Open the Actions page of this repository: https://github.com/hotlinehq/homebrew-hotline/actions
+   2. Choose the workflow "update recipes" on the left.
+   3. Press **Run workflow**, keep the branch `main`, and press the green **Run workflow** button.
+   4. Wait for the run to turn green. It reads the newest proxy edge release and the newest Capture release, copies each release's own checksum into the recipe, and commits only when something changed. The recipes are written by `scripts/update.sh`; do not edit them by hand.
+2. **Update your Mac:**
+   ```
+   brew update
+   brew upgrade hotline-proxy-edge
+   brew upgrade --cask hotline-capture
+   ```
+   `brew update` fetches the tap's new recipes. `brew upgrade` then installs the newer builds, and does nothing when you are already current.
