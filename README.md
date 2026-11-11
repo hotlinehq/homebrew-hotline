@@ -11,12 +11,16 @@ You need a Mac with Apple silicon (an M-series chip).
    ```
    brew tap hotlinehq/hotline
    ```
-3. **Install what you need:**
+3. **Trust the tap.** Newer Homebrew refuses recipes from a tap it was not told to trust. This tap is yours, so say so once:
+   ```
+   brew trust hotlinehq/hotline
+   ```
+4. **Install what you need:**
    ```
    brew install hotline-proxy-edge          # the proxy, newest build of main
    brew install --cask hotline-capture      # the Capture app, into /Applications
    ```
-4. **Check it worked:**
+5. **Check it worked:**
    ```
    hotline-proxy version
    ls /Applications | grep "Hotline Capture"
