@@ -84,7 +84,7 @@ cask "hotline-capture" do
   homepage "https://github.com/hotlinehq/hotline-macos-capture"
 
   depends_on arch: :arm64
-  depends_on macos: ">= :ventura"
+  depends_on macos: :ventura
 
   app "Hotline Capture.app"
 end
