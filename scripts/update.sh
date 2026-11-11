@@ -16,6 +16,7 @@ capture=hotlinehq/hotline-macos-capture
 # never end up inside a recipe.
 check() { printf '%s' "$2" | grep -Eq "$3" || { echo "unexpected $1: $2" >&2; exit 1; }; }
 
+mkdir -p "$root/Formula" "$root/Casks"
 work="$(mktemp -d)"
 trap 'rm -rf "$work"' EXIT
 
