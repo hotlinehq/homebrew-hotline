@@ -1,0 +1,30 @@
+# Press "Run workflow" on the Actions page to bring the recipes up to date
+# with the newest proxy edge build and the newest Capture release. It commits
+# to main only when a recipe changed. Never runs by itself (Peter, 2026-11-11).
+name: update recipes
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write   # commit the changed recipes
+
+jobs:
+  update:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: read the releases and rewrite the recipes
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: scripts/update.sh
+      - name: commit what changed
+        run: |
+          set -eu
+          if git diff --quiet; then
+            echo "Recipes already current."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -am "Update recipes to the newest builds"
+          git push
