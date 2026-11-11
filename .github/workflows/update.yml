@@ -20,11 +20,14 @@ jobs:
       - name: commit what changed
         run: |
           set -eu
-          if git diff --quiet; then
+          # A brand new recipe is untracked, so look at the whole status and
+          # add everything, not only files git already knows.
+          if [ -z "$(git status --porcelain)" ]; then
             echo "Recipes already current."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -am "Update recipes to the newest builds"
+          git add -A
+          git commit -m "Update recipes to the newest builds"
           git push
