@@ -19,7 +19,13 @@ check() { printf '%s' "$2" | grep -Eq "$3" || { echo "unexpected $1: $2" >&2; ex
 work="$(mktemp -d)"
 trap 'rm -rf "$work"' EXIT
 
+# Say which repository a failing step was reading, since "release not found"
+# alone does not tell. It also happens when this run's token cannot see a
+# private repository.
+step() { echo "== $1"; }
+
 # --- Proxy, edge build -------------------------------------------------
+step "reading the edge release of $hotline"
 gh release download edge --repo "$hotline" --pattern SHA256SUMS --dir "$work"
 edge_sha=$(awk '$2=="hotline-proxy_edge_darwin_arm64.tar.gz" {print $1}' "$work/SHA256SUMS")
 edge_commit=$(gh release view edge --repo "$hotline" --json body --jq .body | grep -oE '[0-9a-f]{40}' | head -1)
@@ -51,7 +57,13 @@ end
 RECIPE
 
 # --- Capture app, newest numbered release --------------------------------
-tag=$(gh release view --repo "$capture" --json tagName --jq .tagName)
+step "reading the newest release of $capture"
+tag=$(gh release list --repo "$capture" --limit 1 --json tagName --jq '.[0].tagName // empty')
+if [ -z "$tag" ]; then
+  echo "No release found in $capture, or this run cannot see it (private?). Capture recipe left as is." >&2
+  echo "proxy edge-${short}, capture not updated"
+  exit 0
+fi
 check "capture tag" "$tag" '^v[0-9]+\.[0-9]+\.[0-9]+$'
 version=${tag#v}
 gh release download "$tag" --repo "$capture" --pattern HotlineCapture.app.tar.sha256 --dir "$work"
