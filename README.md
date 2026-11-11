@@ -2,14 +2,21 @@
 
 Homebrew install recipes for [Hotline](https://github.com/hotlinehq/hotline). A tap is a repository of such recipes.
 
-## Install the newest edge build
+## Install
 
 ```
 brew tap hotlinehq/hotline
-brew install hotline-proxy-edge
-hotline-proxy version
+brew install hotline-proxy-edge          # the proxy, newest build of main
+brew install --cask hotline-capture      # the Capture app, into /Applications
 ```
 
-Update later with `brew update && brew upgrade hotline-proxy-edge`.
+Both are Apple silicon only, signed and notarized. After installing the Capture app, macOS asks you to approve its system extension in System Settings.
 
-Edge is the newest build of the main branch: the signed and notarized Mac program, Apple silicon only. The recipe `Formula/hotline-proxy-edge.rb` is rewritten by Hotline's release workflow with `scripts/update-edge.sh` on every edge build, so do not edit it by hand.
+## Update
+
+```
+brew update && brew upgrade hotline-proxy-edge
+brew upgrade --cask hotline-capture
+```
+
+New builds show up here only after someone presses **Run workflow** on the "update recipes" workflow on this repository's Actions page. It reads the newest proxy edge release and the newest Capture release, copies each release's own checksum into the recipe, and commits only when something changed. The recipes are written by `scripts/update.sh`; do not edit them by hand.
