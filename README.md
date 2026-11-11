@@ -22,6 +22,8 @@ You need a Mac with Apple silicon (an M-series chip).
    ls /Applications | grep "Hotline Capture"
    ```
 
+If the Capture app is already in /Applications (for example from a manual download), `brew install --cask hotline-capture` stops with "already an App". Quit the app, then run `brew install --cask --adopt hotline-capture` to let Homebrew take over the existing copy, or add `--force` to replace it.
+
 Both are signed and notarized. After installing the Capture app, macOS asks you to approve its system extension in System Settings. The first run of a program needs internet, so Apple can confirm its approval.
 
 To remove them: `brew uninstall hotline-proxy-edge`, `brew uninstall --cask hotline-capture`, and `brew untap hotlinehq/hotline`.
