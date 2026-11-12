@@ -33,6 +33,14 @@ edge_commit=$(gh release view edge --repo "$hotline" --json body --jq .body | gr
 check "edge checksum" "$edge_sha" '^[0-9a-f]{64}$'
 check "edge commit" "$edge_commit" '^[0-9a-f]{40}$'
 short=$(printf '%s' "$edge_commit" | cut -c1-12)
+# Homebrew upgrades only when the new version compares higher than the
+# installed one, and a bare commit hash is random, so about half of all builds
+# looked older. Lead with the commit's UTC date and time so versions always
+# grow, and keep the hash so the build stays identifiable.
+edge_date=$(gh api "repos/$hotline/commits/$edge_commit" --jq .commit.committer.date)
+check "edge commit date" "$edge_date" '^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$'
+stamp=$(printf '%s' "$edge_date" | tr -d ':T-' | tr -d 'Z')
+edge_version="edge-${stamp}-${short}"
 
 cat > "$root/Formula/hotline-proxy-edge.rb" <<RECIPE
 # Written by scripts/update.sh. Do not edit by hand.
@@ -40,7 +48,7 @@ class HotlineProxyEdge < Formula
   desc "Hotline proxy, newest build of main (signed and notarized, Apple silicon)"
   homepage "https://github.com/hotlinehq/hotline"
   url "https://github.com/hotlinehq/hotline/releases/download/edge/hotline-proxy_edge_darwin_arm64.tar.gz"
-  version "edge-${short}"
+  version "${edge_version}"
   sha256 "${edge_sha}"
   license "Apache-2.0"
 
@@ -62,7 +70,7 @@ step "reading the newest release of $capture"
 tag=$(gh release list --repo "$capture" --limit 1 --json tagName --jq '.[0].tagName // empty')
 if [ -z "$tag" ]; then
   echo "No release found in $capture, or this run cannot see it (private?). Capture recipe left as is." >&2
-  echo "proxy edge-${short}, capture not updated"
+  echo "proxy ${edge_version}, capture not updated"
   exit 0
 fi
 check "capture tag" "$tag" '^v[0-9]+\.[0-9]+\.[0-9]+$'
@@ -90,4 +98,4 @@ cask "hotline-capture" do
 end
 RECIPE
 
-echo "proxy edge-${short}, capture ${version}"
+echo "proxy ${edge_version}, capture ${version}"
