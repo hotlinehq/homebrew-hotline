@@ -1,7 +1,7 @@
 # Written by scripts/update.sh. Do not edit by hand.
 cask "hotline-capture" do
-  version "0.1.6"
-  sha256 "a138465ff5f84a0e20f2654a3ad9a3169a136665b7130ba43c1f3bac892e8d02"
+  version "0.2.0"
+  sha256 "f43810514f08fb37ea18796ebc7c954f18b9dc0d789f661a1ae76521abc0238f"
 
   url "https://github.com/hotlinehq/hotline-macos-capture/releases/download/v#{version}/HotlineCapture.app.tar"
   name "Hotline Capture"
