@@ -44,7 +44,6 @@ Two things happen in order: first the tap learns about new builds, then your Mac
 2. **Update your Mac:**
    ```
    brew update
-   brew upgrade hotline-proxy-edge
-   brew upgrade --cask hotline-capture
+   brew upgrade
    ```
-   `brew update` fetches the tap's new recipes. `brew upgrade` then installs the newer builds, and does nothing when you are already current.
+   `brew update` fetches the tap's new recipes. A plain `brew upgrade` is all that is needed for both the proxy and Capture: it installs the newer builds, and does nothing when you are already current. The proxy version is `edge-<commit time>-<short hash>`, so every new build counts as newer.
