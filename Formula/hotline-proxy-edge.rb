@@ -3,8 +3,8 @@ class HotlineProxyEdge < Formula
   desc "Hotline proxy, newest build of main (signed and notarized, Apple silicon)"
   homepage "https://github.com/hotlinehq/hotline"
   url "https://github.com/hotlinehq/hotline/releases/download/edge/hotline-proxy_edge_darwin_arm64.tar.gz"
-  version "edge-20261112214344-3da97991ce70"
-  sha256 "59191ca7d7b9875aa4d12b7cc868f99f269879518bcebcc0a4bce23f56e6f55d"
+  version "edge-20261117210217-ed2e13192d4d"
+  sha256 "3a23d87cd5385460b42f56186ffbe57672c93708550ea057864eea257fb50bc8"
   license "Apache-2.0"
 
   depends_on arch: :arm64
